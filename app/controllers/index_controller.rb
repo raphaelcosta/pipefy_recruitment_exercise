@@ -5,7 +5,7 @@ class IndexController < ApplicationController
 
   def index
   	@organization = Organization.first
-    @pipes = @organization.pipes
+    @pipes = @organization.try(:pipes)
   end
 
   def fetch_new_data
