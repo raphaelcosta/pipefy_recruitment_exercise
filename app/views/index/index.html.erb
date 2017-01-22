@@ -1,0 +1,49 @@
+<div class="row">
+	<div class="col-md-10"><h1><strong>API Communicator</strong></h1></div>
+  <div class="col-md-2">
+  	<%= link_to I18n.t('html_links.fetch_new_data'), index_fetch_new_data_path, class: 'btn btn-success pull-right' %>
+  </div>
+</div>
+<% if @pipes.present? %>
+  <h1><%= @organization.name %></h1>
+  <hr/>
+  <% @pipes.each do |pipe| %>
+    <h3>Pipe: <%= pipe.name %></h3>
+    <% pipe.phases.each do |phase| %>
+      <div class="jumbotron">
+        <blockquote class="blockquote">
+          <div>
+            Phase: <%= phase.name %> 
+            <% if phase.done %>
+              <span class="done">[Done!]</span>
+            <% end %>
+          </div>
+          <div>Description: <%= phase.description %></div>
+
+        </blockquote>
+        <% if phase.cards.present? %>
+          <table class="table table-sm table-inverse">
+            <thead>
+              <th>Card Title</th>
+              <th>Due Date</th>
+            </thead>
+            <tbody>
+              <% phase.cards.each do |card| %>
+                <tr>
+                  <td><%= card.title %></td>
+                  <td><%= card.due_date.try(:strftime, "%m/%d/%Y") %></td>
+                </tr>
+              <% end %>
+            </tbody>
+          </table>
+        <% else %>
+          <p><strong> There is no card for this phase :) </strong></p>
+        <% end %>
+      </div>
+    <% end %>
+    <hr/>
+    <div class='end'></div>
+  <% end %>
+<% else %>
+  <strong> Nothing to show. You can try <%= link_to t('html_links.fet_new_data'), index_fetch_new_data_path %> :) </strong>
+<% end %>
