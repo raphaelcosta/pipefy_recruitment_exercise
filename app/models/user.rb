@@ -1,3 +1,3 @@
 class User < ApplicationRecord
-	belongs_to :pipe
+  belongs_to :pipe
 end
