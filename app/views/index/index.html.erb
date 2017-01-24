@@ -19,19 +19,26 @@
             <% end %>
           </div>
           <div>Description: <%= phase.description %></div>
-
         </blockquote>
         <% if phase.cards.present? %>
           <table class="table table-sm table-inverse">
             <thead>
               <th>Card Title</th>
               <th>Due Date</th>
+              <% used_fields = [] %>
+              <% phase.fields.order(:external_id).each do  |field| %>
+                <% used_fields << field.external_id %>
+                <th><%= field.label %></th>
+              <% end %>
             </thead>
             <tbody>
               <% phase.cards.each do |card| %>
                 <tr>
                   <td><%= card.title %></td>
                   <td><%= card.due_date.try(:strftime, "%m/%d/%Y") %></td>
+                  <% used_fields.each do |field_external_id| %>
+                    <td><%= card.field_values.find_by_external_field_id(field_external_id).try(:display_value) %></td>
+                  <% end %>
                 </tr>
               <% end %>
             </tbody>

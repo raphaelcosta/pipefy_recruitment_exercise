@@ -17,7 +17,17 @@ describe API::Updater do
          "labels"=> [{"id"=>594180, "name"=>"Blocker", "color"=>"#000000"}],
          "phases"=>
           [{"id"=>1065145, "name"=>"Start form", "description"=>'teste', "done"=>false, "pipe_id"=>143156, "index"=>0.0, "draft"=>true,
-            "cards"=>[{"id"=>1605641, "title"=>"Draft", "current_phase_id"=>1065145, "due_date"=>"2017-01-18T12:04:15.321-02:00", "index"=>0.1}]}]}
+            "cards"=>[{"id"=>1605641, "title"=>"Draft", "current_phase_id"=>1065145, "due_date"=>"2017-01-18T12:04:15.321-02:00", "index"=>0.1,
+            "field_values"=>[{"id"=>7676067, "value"=>"Esse foi o João que postou!", "display_value"=>"Esse foi o João que postou!", "field_id"=>2846632}]
+            }],
+
+          },
+         "fields"=> [{"id"=>2846632, "label"=>"What's the bug?","options"=>[],"description"=>"In a few words, define the problem you encountered.",
+                      "is_title_field"=>true,"help_html"=>nil,"editable"=>true,
+                      "type"=>{"id"=>1,"name"=>"Short Text","component"=>"<input>","html_class"=>"short-text","editable"=>true,"multiple"=>false,
+                      "assignee"=>false,"label"=>false}}],
+          ]
+          }
         ])
 
       updater.stub(:request!).and_return(true)
@@ -44,7 +54,6 @@ describe API::Updater do
       expect(user.username).to eql 'user'
       expect(user.email).to    eql 'user@pipefy.com'
       expect(user.display_username).to eql 'usuario'
-
     end
 
     it 'should fetch new label' do
@@ -67,6 +76,19 @@ describe API::Updater do
       card = Card.find_by_external_id(1605641)
       expect(card.title).to    eql 'Draft'
       expect(card.index).to    eql 0.1
+    end
+
+    it 'should fetch new field' do
+      field = Field.find_by_external_id(2846632)
+      expect(field.label).to          eql "What's the bug?"
+      expect(field.description).to    eql "In a few words, define the problem you encountered."
+      expect(field.is_title_field).to be_truthy
+    end
+
+    it 'should fetch new field_value' do
+      field_value = FieldValue.find_by_external_id(7676067)
+      expect(field_value.value).to         eql "Esse foi o João que postou!"
+      expect(field_value.display_value).to eql "Esse foi o João que postou!"
     end
   end
 

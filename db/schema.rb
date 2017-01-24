@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170121024828) do
+ActiveRecord::Schema.define(version: 20170124001029) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -24,6 +24,28 @@ ActiveRecord::Schema.define(version: 20170121024828) do
     t.datetime "created_at",  null: false
     t.datetime "updated_at",  null: false
     t.index ["phase_id"], name: "index_cards_on_phase_id", using: :btree
+  end
+
+  create_table "field_values", force: :cascade do |t|
+    t.integer  "card_id"
+    t.integer  "external_id"
+    t.string   "value"
+    t.string   "display_value"
+    t.integer  "external_field_id"
+    t.datetime "created_at",        null: false
+    t.datetime "updated_at",        null: false
+    t.index ["card_id"], name: "index_field_values_on_card_id", using: :btree
+  end
+
+  create_table "fields", force: :cascade do |t|
+    t.integer  "phase_id"
+    t.integer  "external_id"
+    t.string   "label"
+    t.string   "description"
+    t.boolean  "is_title_field"
+    t.datetime "created_at",     null: false
+    t.datetime "updated_at",     null: false
+    t.index ["phase_id"], name: "index_fields_on_phase_id", using: :btree
   end
 
   create_table "labels", force: :cascade do |t|
